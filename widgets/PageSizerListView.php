@@ -52,24 +52,27 @@ class PageSizerListView extends ListView
         $pageVar = $pagination->getPage();    
         $pageSize = $pagination->getpageSize();    
  
-        $links = array();       
-        foreach ($this->sizerVariants as $count)
-        {
-            $params = array_replace($_GET, array($this->sizerAttribute => $count));
+//        $links = array();
+ //       foreach ($this->sizerVariants as $count)
+ //       {
+//            $params = array_replace($_GET, array($this->sizerAttribute => $count));
  
-            if (isset($params[$pageVar])) 
-                unset($params[$pageVar]);
+//            if (isset($params[$pageVar]))
+//                unset($params[$pageVar]);
  
-            if ($count == $pageSize)
-                $links[] = $count;
-            else {            
+//            if ($count == $pageSize)
+//                $links[] = $count;
+//            else {
 				$route = Yii::$app->controller->route;
-				$params = array_merge([$route], $params);
+//				$params = array_merge([$route], $params);
 //				$url = Yii::$app->urlManager->createUrl($params);                
-				$links[] = Html::a($count, $params);
-			}
-        }        
-        echo Html::tag('div', $this->sizerHeader . implode(', ', $links), ['class' => $this->sizerCssClass]);
-        echo $this->sizerFooter;
+//				$links[] = Html::a($count, $params);
+//			}
+//        }
+        echo Html::beginForm([$route], 'get', ['class' => 'formHorizontal']);
+        echo Html::dropDownList('per-page', $pageSize, array_combine($this->sizerVariants, $this->sizerVariants), ['onChange' => 'this.form.submit()']);
+        echo Html::endForm();
+//        echo Html::tag('div', $this->sizerHeader . implode(', ', $links), ['class' => $this->sizerCssClass]);
+//        echo $this->sizerFooter;
     }
 }

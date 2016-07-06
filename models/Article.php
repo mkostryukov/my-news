@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%article}}".
@@ -20,6 +21,14 @@ use Yii;
  */
 class Article extends \yii\db\ActiveRecord
 {
+    /** @inheritdoc */
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -34,7 +43,7 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'created_at', 'updated_at'], 'required'],
+            [['title'], 'required'],
             [['intro', 'body'], 'string'],
             [['status', 'author', 'created_at', 'updated_at'], 'integer'],
             [['title'], 'string', 'max' => 255],

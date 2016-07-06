@@ -66,7 +66,7 @@ class SiteController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
-				'pageSize' => Yii::$app->request->getQueryParam('size', 10),
+				'pageSize' => Yii::$app->request->getQueryParam('per-page', 10),
 			],
         ]);
         return $this->render('index', [
