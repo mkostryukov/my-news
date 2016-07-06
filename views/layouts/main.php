@@ -42,8 +42,9 @@ AppAsset::register($this);
 	else {
         $nestedmenuItems[] = ['label' => 'Profile', 'url' => ['/user/settings/profile']];
         $nestedmenuItems[] = ['label' => 'Logout',  'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']];
+		if (Yii::$app->user->can('manageArticles'))
+            $nestedmenuItems[] = ['label' => 'Manage articles', 'url' => ['/article/index']];
 		if (Yii::$app->user->can('adminPermission'))
-//        if (Yii::$app->user->identity->isAdmin)
             $nestedmenuItems[] = ['label' => 'Manage users', 'url' => ['/user/admin/index']];
 		$menuItems[] = [
 			'label' => 'User (' . Yii::$app->user->identity->username . ')',

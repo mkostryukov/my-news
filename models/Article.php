@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use \dektrium\user\models\Profile;
+use app\behaviors\AuthorBehavior;
 
 /**
  * This is the model class for table "{{%article}}".
@@ -25,6 +27,7 @@ class Article extends \yii\db\ActiveRecord
     public function behaviors()
     {
         return [
+            AuthorBehavior::className(),
             TimestampBehavior::className(),
         ];
     }
@@ -71,9 +74,14 @@ class Article extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthor0()
+    public function getAuthor()
     {
         return $this->hasOne(User::className(), ['id' => 'author']);
+    }
+
+    public function getUserProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'author']);
     }
 
     /**

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b6799dcfe7a886c26e5dd5bb6b832ced",
-    "content-hash": "c2833c0649c2f39f13a1ca0699aad70c",
+    "hash": "d8c27bf5a164ecffee816c47929d557c",
+    "content-hash": "784f05629134cba2d512ea784fa481c7",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -553,6 +553,51 @@
                 "yii2"
             ],
             "time": "2016-06-14 13:48:39"
+        },
+        {
+            "name": "nterms/yii2-pagesize-widget",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nterms/yii2-pagesize-widget.git",
+                "reference": "ccb2147379deeb79533e73d0ecd4a275b4ddf5b4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nterms/yii2-pagesize-widget/zipball/ccb2147379deeb79533e73d0ecd4a275b4ddf5b4",
+                "reference": "ccb2147379deeb79533e73d0ecd4a275b4ddf5b4",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "nterms\\pagesize\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Saranga Abeykoon",
+                    "email": "amisaranga@gmail.com",
+                    "homepage": "http://nterms.com/"
+                }
+            ],
+            "description": "Widget for enabling dynamic page size selection on GridView",
+            "homepage": "https://github.com/nterms/yii2-pagesize-widget",
+            "keywords": [
+                "extension",
+                "grid-view",
+                "page-size",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-11-26 14:45:39"
         },
         {
             "name": "swiftmailer/swiftmailer",
