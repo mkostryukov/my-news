@@ -53,8 +53,11 @@ $config = [
 	'modules' => [
 		'user' => [
 			'class' => 'dektrium\user\Module',
-			'admins' => ['mega'],
+//			'admins' => ['mega'],
 			'adminPermission' => 'adminPermission',
+			'modelMap' => [
+				'User' => 'app\models\User',
+			],
 		],
 		'rbac' => [
 			'class' => 'dektrium\rbac\Module',

@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <?= PageSizerListView::widget([
         'dataProvider' => $dataProvider,
 		'itemView' => '_article',
-		'layout' => "{sizer}{summary}{items}{pager}",
-		'sizerVariants' => array(10, 20, 30),
-		'sizerAttribute' => 'size',
+		'layout' => "{summary}{items}{pager}{pagesizer}",
+		'pagesizerVariants' => array(10, 20, 30),
+		'pagesizerAttribute' => 'per-page',
 	]); 
 ?>
 </div>

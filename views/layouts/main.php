@@ -35,7 +35,6 @@ AppAsset::register($this);
     ]);
 	$menuItems[] = ['label' => 'Home', 'url' => ['/site/index']];
 	$menuItems[] = ['label' => 'About', 'url' => ['/site/about']];
-	$menuItems[] = ['label' => 'Contact', 'url' => ['/site/contact']];
 	if (Yii::$app->user->isGuest) {
 		$menuItems[] = ['label' => 'Login', 'url' => ['/user/security/login']];
 		$menuItems[] = ['label' => 'Signup', 'url' => ['/user/registration/register']];
@@ -43,7 +42,8 @@ AppAsset::register($this);
 	else {
         $nestedmenuItems[] = ['label' => 'Profile', 'url' => ['/user/settings/profile']];
         $nestedmenuItems[] = ['label' => 'Logout',  'url' => ['/user/security/logout'], 'linkOptions' => ['data-method' => 'post']];
-        if (Yii::$app->user->identity->isAdmin)
+		if (Yii::$app->user->can('adminPermission'))
+//        if (Yii::$app->user->identity->isAdmin)
             $nestedmenuItems[] = ['label' => 'Manage users', 'url' => ['/user/admin/index']];
 		$menuItems[] = [
 			'label' => 'User (' . Yii::$app->user->identity->username . ')',
