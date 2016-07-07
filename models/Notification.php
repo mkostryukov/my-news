@@ -3,26 +3,24 @@
 namespace app\models;
 
 use Yii;
-use \dektrium\user\models\Profile;
-use yii\behaviors\TimestampBehavior;
-use app\behaviors\AuthorBehavior;
 
 /**
- * This is the model class for table "{{%article}}".
+ * This is the model class for table "{{%notification}}".
  *
  * @property integer $id
+ * @property string $type
  * @property string $title
- * @property string $intro
- * @property string $body
- * @property integer $status
+ * @property string $message
+ * @property string $location
+ * @property integer $recipient
  * @property integer $author
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property User $author
- * @property AuthorProfile $author
+ * @property User $recipient0
+ * @property User $author0
  */
-class Article extends \yii\db\ActiveRecord
+class Notification extends \yii\db\ActiveRecord
 {
     /** @inheritdoc */
     public function behaviors()
@@ -38,7 +36,7 @@ class Article extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%article}}';
+        return '{{%notification}}';
     }
 
     /**
@@ -47,10 +45,11 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
-            [['intro', 'body'], 'string'],
-            [['status', 'author', 'created_at', 'updated_at'], 'integer'],
-            [['title'], 'string', 'max' => 255],
+            [['title', 'location', 'created_at', 'updated_at'], 'required'],
+            [['message'], 'string'],
+            [['recipient', 'author', 'created_at', 'updated_at'], 'integer'],
+            [['type', 'title', 'location'], 'string', 'max' => 255],
+            [['recipient'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['recipient' => 'id']],
             [['author'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author' => 'id']],
         ];
     }
@@ -62,14 +61,31 @@ class Article extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'type' => Yii::t('app', 'Type'),
             'title' => Yii::t('app', 'Title'),
-            'intro' => Yii::t('app', 'Intro'),
-            'body' => Yii::t('app', 'Body'),
-            'status' => Yii::t('app', 'Status'),
+            'message' => Yii::t('app', 'Message'),
+            'location' => Yii::t('app', 'Location'),
+            'recipient' => Yii::t('app', 'Recipient'),
             'author' => Yii::t('app', 'Author'),
             'created_at' => Yii::t('app', 'Created At'),
             'updated_at' => Yii::t('app', 'Updated At'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecipient()
+    {
+        return $this->hasOne(User::className(), ['id' => 'recipient']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRecipientProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'recipient']);
     }
 
     /**
@@ -90,10 +106,10 @@ class Article extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return ArticleQuery the active query used by this AR class.
+     * @return NotificationQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new ArticleQuery(get_called_class());
+        return new NotificationQuery(get_called_class());
     }
 }

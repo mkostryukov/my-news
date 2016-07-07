@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Article;
 use app\models\ArticleSearch;
+use app\traits\EventTrait;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,7 +16,45 @@ use yii\filters\AccessControl;
  */
 class ArticleController extends Controller
 {
+    use EventTrait;
+
     /**
+     * Event is triggered before creating new article.
+     * Triggered with \app\events\AricleEvent.
+     */
+    const EVENT_BEFORE_CREATE = 'beforeCreate';
+
+    /**
+     * Event is triggered after creating new article.
+     * Triggered with \dektrium\user\events\UserEvent.
+     */
+    const EVENT_AFTER_CREATE = 'afterCreate';
+
+    /**
+     * Event is triggered before updating existing article.
+     * Triggered with \app\events\AricleEvent.
+     */
+    const EVENT_BEFORE_UPDATE = 'beforeUpdate';
+
+    /**
+     * Event is triggered after updating existing article.
+     * Triggered with \app\events\AricleEvent.
+     */
+    const EVENT_AFTER_UPDATE = 'afterUpdate';
+
+    /**
+     * Event is triggered before deleting existing article.
+     * Triggered with \app\events\AricleEvent.
+     */
+    const EVENT_BEFORE_DELETE = 'beforeDelete';
+
+    /**
+     * Event is triggered after deleting existing article.
+     * Triggered with \app\events\AricleEvent.
+     */
+    const EVENT_AFTER_DELETE = 'afterDelete';
+
+	/**
      * @inheritdoc
      */
     public function behaviors()
@@ -75,7 +114,11 @@ class ArticleController extends Controller
     {
         $model = new Article();
 
+        $event = $this->getArticleEvent($model);	
+        $this->trigger(self::EVENT_BEFORE_CREATE, $event);
+		
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->trigger(self::EVENT_AFTER_CREATE, $event);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -94,7 +137,11 @@ class ArticleController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $event = $this->getArticleEvent($model);
+		
+		$this->trigger(self::EVENT_BEFORE_UPDATE, $event);
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			$this->trigger(self::EVENT_AFTER_UPDATE, $event);
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -111,7 +158,12 @@ class ArticleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $event = $this->getArticleEvent($model);
+
+		$this->trigger(self::EVENT_BEFORE_DELETE, $event);
+		$model->delete();
+		$this->trigger(self::EVENT_AFTER_DELETE, $event);
 
         return $this->redirect(['index']);
     }

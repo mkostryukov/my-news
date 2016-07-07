@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Article */
+/* @var $model app\models\Notification */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Articles'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Notifications'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="article-view">
+<div class="notification-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -30,12 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'intro:html',
-            'body:html',
-            'status',
-            ['label' => 'author', 'value' => $model->authorProfile->name],
-            'created_at:datetime',
-            'updated_at:datetime',
+            'message:ntext',
+            'location',
+            'recipient',
+            'author',
+            'created_at',
+            'updated_at',
         ],
     ]) ?>
 

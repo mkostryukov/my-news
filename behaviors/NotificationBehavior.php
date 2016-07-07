@@ -10,7 +10,7 @@ class UserBehavior extends Behavior
     public function events()
     {
         return [
-            \dektrium\user\models\User::AFTER_CREATE => 'setDefaultRole',
+            \dektrium\user\models\User::AFTER_CREATE => 'notifyUserCreate',
 			\app\models\User::EVENT_NEW_USER => 'createNotification',
         ];
     }

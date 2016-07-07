@@ -29,7 +29,7 @@ class m160705_161243_create_news_table extends Migration
             'updated_at' => $this->integer()->notNull()
         ], $tableOptions);
 
-         $this->addForeignKey('fk_article', '{{%article}}', 'author', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+         $this->addForeignKey('fk_article_author', '{{%article}}', 'author', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
    }
 
     /**
