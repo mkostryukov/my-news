@@ -1,5 +1,6 @@
 <?php
-namespace yiicod\listener\components;
+namespace app\components;
+
 use Yii;
 use yii\base\Component;
 use yii\base\Event;

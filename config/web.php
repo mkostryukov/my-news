@@ -55,10 +55,11 @@ $config = [
 			'class' => 'dektrium\user\Module',
 //			'admins' => ['mega'],
 			'adminPermission' => 'adminPermission',
-//			'as UserBehavior' => ['class' => '\app\behaviors\UserBehavior'],
 			'modelMap' => [
-				'User' => 'app\models\User',
-//				'on ' . \dektrium\user\models\User::AFTER_CREATE => ['app\models\User', 'delNotification'], 
+				'User' => [
+					'class' => 'app\models\User',
+					'on ' . dektrium\user\models\User::AFTER_CREATE => ['app\models\User', 'setDefaultRole'],
+				],
 			],
 		],
 		'rbac' => [

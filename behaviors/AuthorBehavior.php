@@ -16,6 +16,7 @@ class AuthorBehavior extends Behavior
 
     public function setUserId()
     {
-        $this->owner->author = Yii::$app->user->getId();
+		if (Yii::$app instanceof yii\web\Application)
+			$this->owner->author = Yii::$app->user->getId();
     }
 }

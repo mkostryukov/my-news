@@ -10,15 +10,20 @@ use yii\base\Event;
 class ArticleEvent extends Event
 {
     /**
-     * @var User
+     * @var Article
      */
     private $_article;
 
     /**
-     * @return User
+     * @return Article
      */
     public function getArticle()
     {
         return $this->_article;
     }
+	
+	public function setArticle(Article $form)
+	{
+        $this->_article = $form;
+	}
 }

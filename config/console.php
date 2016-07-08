@@ -27,6 +27,11 @@ $config = [
 			'class' => 'dektrium\rbac\components\DbManager',
 		],
     ],
+	'modules' => [
+		'user' => [
+			'class' => 'dektrium\user\Module',
+		],
+	],
     'params' => $params,
     /*
     'controllerMap' => [

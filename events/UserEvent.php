@@ -21,4 +21,12 @@ class UserEvent extends Event
     {
         return $this->_user;
     }
+	
+    /**
+     * @param User $form
+     */
+    public function setUser(User $form)
+    {
+        $this->_user = $form;
+    }
 }

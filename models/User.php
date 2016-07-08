@@ -3,13 +3,16 @@ namespace app\models;
 
 use Yii;
 use app\behaviors\UserBehavior;
-use \dektrium\user\models\User as BaseUser;
+use dektrium\user\models\User as BaseUser;
 
 class User extends BaseUser
 {
-	public function behaviors()
+
+	public function setDefaultRole()
 	{
-		$behaviors = parent::behaviors();
-		return array_merge($behaviors, ['class' => UserBehavior::className()]);
+		$auth = Yii::$app->authManager;
+		$authUser = $auth->getRole('auth_user');
+		$auth->assign($authUser, $this->owner->getId());
 	}
+	
 }
