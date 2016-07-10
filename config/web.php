@@ -65,7 +65,14 @@ $config = [
 		'rbac' => [
 			'class' => 'dektrium\rbac\Module',
 		],
-	],
+		'notifications' => [
+			'class' => 'app\modules\notifications\NotificationsModule',
+			// This callable should return your logged in user Id
+			'userId' => function() {
+				return \Yii::$app->user->id;
+				}
+			],
+		],
     'params' => $params,
 ];
 

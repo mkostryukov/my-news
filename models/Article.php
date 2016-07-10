@@ -19,8 +19,8 @@ use app\behaviors\AuthorBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property User $author
- * @property AuthorProfile $author
+ * @property User $user
+ * @property Profile $authorProfile
  */
 class Article extends \yii\db\ActiveRecord
 {
@@ -75,7 +75,7 @@ class Article extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuthor()
+    public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'author']);
     }

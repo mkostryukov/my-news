@@ -1,6 +1,8 @@
 <?php
 namespace app\modules\notifications\controllers;
-useapp\modules\notifications\models\Notification;
+
+use app\modules\notifications\components\Notification;
+use Exception;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
@@ -14,9 +16,9 @@ class NotificationsController extends Controller
      */
     private $user_id;
     /**
-     * @var string The notification classes
+     * @var array The NotificationTransport class name array
      */
-    private $notificationClasses = [];
+    private $transports = [];
     /**
      * @inheritdoc
      */
@@ -24,7 +26,7 @@ class NotificationsController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $this->user_id = $this->module->userId;
-        $this->notificationClass = $this->module->notificationClass;
+        $this->transports = $this->module->transports;
         parent::init();
     }
     /**
@@ -38,12 +40,12 @@ class NotificationsController extends Controller
         /** @var Notification $class */
 		if (!is_array($this->notificationClasses))
 			throw new Exception("Notification classes shoul be array");
-		foreach ($this->notificationClasses as $class) {
+        $results = [];
+		foreach ($this->transports as $class) {
 			$models = $class::find()->where([
 				'user_id' => $this->user_id,
 				'seen' => $seen
 			])->all();
-			$results = [];
 			foreach ($models as $model) {
 				/** @var Notification $model */
 				$results[] = [
