@@ -1,115 +1,101 @@
-<?php
-
+<?
 namespace app\models;
 
 use Yii;
+use yii\helpers\Url;
+use app\models\Article;
+use app\models\User;
+use app\modules\notifications\models\Notification as BaseNotification;
 
-/**
- * This is the model class for table "{{%notification}}".
- *
- * @property integer $id
- * @property string $type
- * @property string $title
- * @property string $message
- * @property string $location
- * @property integer $recipient
- * @property integer $author
- * @property integer $created_at
- * @property integer $updated_at
- *
- * @property User $recipient0
- * @property User $author0
- */
-class Notification extends \yii\db\ActiveRecord
+class Notification extends BaseNotification
 {
-    /** @inheritdoc */
-    public function behaviors()
+    /**
+     * A new message notification
+     */
+    const KEY_NEW_USER = 'new_user';
+    /**
+     * A meeting reminder notification
+     */
+    const KEY_NEW_ARTICLE = 'new_article';
+    /**
+     * No disk space left !
+     */
+    const KEY_MESSAGE = 'message';
+
+    /**
+     * @var array Holds all usable notifications
+     */
+    public static $keys = [
+        self::KEY_NEW_USER,
+        self::KEY_NEW_ARTICLE,
+        self::KEY_MESSAGE,
+    ];
+	
+    /**
+     * @inheritdoc
+     */
+    public function getTitle()
     {
-        return [
-            AuthorBehavior::className(),
-            TimestampBehavior::className(),
-        ];
+        switch ($this->key) {
+            case self::KEY_NEW_USER:
+                return Yii::t('app', 'New user created');
+
+            case self::KEY_NEW_ARTICLE:
+                return Yii::t('app', 'New article created');
+
+/*            case self::KEY_MESSAGE:
+                $message = Message::findOne($this->key_id);
+                return Yii::t('app', 'Message: {title}'. [
+                        'title' => $message->title
+                    ]);*/
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public static function tableName()
+    public function getDescription()
     {
-        return '{{%notification}}';
+        switch ($this->key) {
+            case self::KEY_NEW_USER:
+                $user = User::findOne($this->key_id);
+                return Yii::t('app', 'New user ID is {userID}', [
+                    'userID' => $user->id
+                ]);
+
+            case self::KEY_NEW_ARTICLE:
+                $article = Article::findOne($this->key_id);
+                return Yii::t('app', 'New article title "{title}"', [
+                    'title' => $article->title
+                ]);
+
+/*            case self::KEY_MESSAGE:
+                $message = Message::findOne($this->key_id);
+                return Yii::t('app', 'Message: {body}'. [
+                        'body' => $message->body
+                    ]);*/
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function getRoute()
     {
-        return [
-            [['title', 'location', 'created_at', 'updated_at'], 'required'],
-            [['message'], 'string'],
-            [['recipient', 'author', 'created_at', 'updated_at'], 'integer'],
-            [['type', 'title', 'location'], 'string', 'max' => 255],
-            [['recipient'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['recipient' => 'id']],
-            [['author'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author' => 'id']],
-        ];
+        switch ($this->key) {
+            case self::KEY_NEW_USER:
+				$route = 'user/admin/update';
+				break;
+
+            case self::KEY_NEW_ARTICLE:
+                $route = 'site/view';
+				break;
+
+ /*           case self::KEY_MESSAGE:
+                return ['message/view', 'id' => $this->key_id];*/
+        };
+		return Url::to([$route, 'id' => $this->key_id], true);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('app', 'ID'),
-            'type' => Yii::t('app', 'Type'),
-            'title' => Yii::t('app', 'Title'),
-            'message' => Yii::t('app', 'Message'),
-            'location' => Yii::t('app', 'Location'),
-            'recipient' => Yii::t('app', 'Recipient'),
-            'author' => Yii::t('app', 'Author'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
-        ];
-    }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRecipient()
-    {
-        return $this->hasOne(User::className(), ['id' => 'recipient']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRecipientProfile()
-    {
-        return $this->hasOne(Profile::className(), ['user_id' => 'recipient']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthor()
-    {
-        return $this->hasOne(User::className(), ['id' => 'author']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthorProfile()
-    {
-        return $this->hasOne(Profile::className(), ['user_id' => 'author']);
-    }
-
-    /**
-     * @inheritdoc
-     * @return NotificationQuery the active query used by this AR class.
-     */
-    public static function find()
-    {
-        return new NotificationQuery(get_called_class());
-    }
 }

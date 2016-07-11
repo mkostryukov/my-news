@@ -7,6 +7,9 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+		'listener' => [
+			'class' => 'app\components\Listener',
+		],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'dcd5FtHuuPFRN_ChE2-Xbag2117-k8_A',
@@ -58,7 +61,7 @@ $config = [
 			'modelMap' => [
 				'User' => [
 					'class' => 'app\models\User',
-					'on ' . dektrium\user\models\User::AFTER_CREATE => ['app\models\User', 'setDefaultRole'],
+					'on ' . yii\db\BaseActiveRecord::EVENT_AFTER_INSERT => ['app\models\User', 'setDefaultRole'],
 				],
 			],
 		],
@@ -74,6 +77,9 @@ $config = [
 			],
 		],
     'params' => $params,
+	'bootstrap' => [
+			'listener',
+		],
 ];
 
 if (YII_ENV_DEV) {

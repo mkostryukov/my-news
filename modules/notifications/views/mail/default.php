@@ -19,5 +19,5 @@ use yii\helpers\Html;
     <?= Html::encode($notification->getDescription()) ?>
 </p>
 <p style="font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif; font-size: 14px; line-height: 1.6; font-weight: normal; margin: 0 0 10px; padding: 0;">
-    <?= Html::a(Html::encode($notification->getTitle()), $notification->getRoute()); ?>
+    <?= Html::a(Html::encode($notification->getRoute()), $notification->getRoute()); ?>
 </p>

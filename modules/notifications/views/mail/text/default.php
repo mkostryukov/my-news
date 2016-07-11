@@ -10,4 +10,4 @@ use yii\helpers\Url;
     <?= Yii::t('app', 'This is notification message from {0}', Yii::$app->name) ?>.
     <?= $notification->getTitle() ?>.
     <?= $notification->getDescription() ?>
-    <?= Url::to($notification->getRoute()) ?>
+    <?= $notification->getRoute() ?>
