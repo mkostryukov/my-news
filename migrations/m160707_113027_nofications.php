@@ -12,26 +12,31 @@ class m160707_113027_nofications extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%notification}}', [
+        $this->createTable('{{%notify_user}}', [
             'id' => $this->primaryKey(),
-			'type' => $this->string()->notNull()->defaultValue('info'),
-            'title' => $this->string()->notNull(),
-			'message' => $this->text(),
-			'location' => $this->string()->notNull(),
-            'recipient' => $this->integer()->notNull()->defaultValue(0),
-            'author' => $this->integer()->notNull()->defaultValue(0),
+            'user_id' => $this->integer()->notNull(),
+			'key' => $this->string()->notNull()->defaultValue('info'),
             'created_at' => $this->integer()->notNull(),
             'updated_at' => $this->integer()->notNull()
         ], $tableOptions);
 
-         $this->addForeignKey('fk_notification_author', '{{%notification}}', 'author', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
-         $this->addForeignKey('fk_notification_recipient', '{{%notification}}', 'recipient', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+        $this->addForeignKey('fk_notify_user', '{{%notify_user}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 
+        $this->createTable('{{%notify_transport}}', [
+            'id' => $this->primaryKey(),
+            'notify_user_id' => $this->integer()->notNull(),
+            'transport_id' => $this->string()->notNull()->defaultValue('info'),
+            'created_at' => $this->integer()->notNull(),
+            'updated_at' => $this->integer()->notNull()
+        ], $tableOptions);
+
+        $this->addForeignKey('fk_notify_transport', '{{%notify_transport}}', 'notify_user_id', '{{%notify_user}}', 'id', 'CASCADE', 'RESTRICT');
     }
 
     public function down()
     {
-        $this->dropTable('{{%notification}}');
+        $this->dropTable('{{%notify_user}}');
+        $this->dropTable('{{%notify_transport}}');
 
         return true;
     }

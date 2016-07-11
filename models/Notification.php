@@ -3,22 +3,20 @@ namespace app\models;
 
 use Yii;
 use yii\helpers\Url;
-use app\models\Article;
-use app\models\User;
 use app\modules\notifications\models\Notification as BaseNotification;
 
 class Notification extends BaseNotification
 {
     /**
-     * A new message notification
+     * A new user notification
      */
     const KEY_NEW_USER = 'new_user';
     /**
-     * A meeting reminder notification
+     * A new article notification
      */
     const KEY_NEW_ARTICLE = 'new_article';
     /**
-     * No disk space left !
+     * Message notification
      */
     const KEY_MESSAGE = 'message';
 
@@ -49,6 +47,8 @@ class Notification extends BaseNotification
                         'title' => $message->title
                     ]);*/
         }
+
+        return "Unknown key: $this->key";
     }
 
     /**
@@ -75,6 +75,8 @@ class Notification extends BaseNotification
                         'body' => $message->body
                     ]);*/
         }
+
+        return "Unknown key: $this->key";
     }
 
     /**
@@ -93,6 +95,9 @@ class Notification extends BaseNotification
 
  /*           case self::KEY_MESSAGE:
                 return ['message/view', 'id' => $this->key_id];*/
+
+            default:
+                $route = '';
         };
 		return Url::to([$route, 'id' => $this->key_id], true);
     }

@@ -2,10 +2,8 @@
 namespace app\modules\notifications;
 
 use Exception;
-use app\modules\notifications\models\Notification;
-use app\modules\notifications\transports\NotificationTransport;
 use yii\base\Module;
-use yii\db\Expression;
+use app\modules\notifications\models\Notification;
 
 class NotificationsModule extends Module
 {
@@ -62,7 +60,7 @@ class NotificationsModule extends Module
         $results = [];
         foreach ($transports as $transportClass) {
             if (class_exists($transportClass)) {
-                /** @var NotificationTransport $transport */
+                /** @var NotificationTransportInterface $transport */
                 $transport = new $transportClass();
                 $results[] = $transport->sendNotification($instance);
             }

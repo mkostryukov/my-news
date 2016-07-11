@@ -2,8 +2,8 @@
 namespace app\modules\notifications\transports;
 
 use Yii;
+use app\modules\notifications\NotificationTransportInterface;
 use app\modules\notifications\models\Notification;
-use app\models\User;
 
 class Mail implements NotificationTransportInterface
 {

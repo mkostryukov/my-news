@@ -1,9 +1,9 @@
 <?php
-namespace app\modules\notification;
+namespace app\modules\notifications;
 
+use Yii;
 use yii\base\Component;
 use yii\base\InvalidParamException;
-use Yii;
 
 /**
  * Collection is a storage for all notification transports in the application.
@@ -61,7 +61,7 @@ class Collection extends Component
 
     /**
      * @param string $id service id.
-     * @return transportInterface notification transport instance.
+     * @return NotificationTransportInterface notification transport instance.
      * @throws InvalidParamException on non existing transport request.
      */
     public function getTransport($id)

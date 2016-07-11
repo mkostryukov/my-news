@@ -1,12 +1,10 @@
 <?php
 namespace app\modules\notifications\models;
 
+use app\modules\notifications\transports\NotificationTransportInterface;
 use Yii;
 use yii\base\Model;
-use app\models\User;
 use app\modules\notifications\NotificationsModule;
-use app\modules\notifications\transports\NotificationTransport;
-use yii\db\ActiveQuery;
 
 abstract class Notification extends Model
 {
@@ -60,9 +58,9 @@ abstract class Notification extends Model
     /**
      * Creates a notification
      *
-     * @param string $transport
-     * @param string $key
-     * @param integer $user_id The user id that will get the notification
+     * @param array NotificationTransportInterface $transports
+     * @param array $recipients
+     * @param integer $key notification key
      * @param integer $key_id The foreign instance id
      * @param string $type
      * @return bool Returns TRUE on success, FALSE on failure
@@ -76,9 +74,10 @@ abstract class Notification extends Model
     /**
      * Creates a warning notification
      *
-     * @param string $key
-     * @param integer $user_id The user id that will get the notification
-     * @param integer $key_id The notification key id
+     * @param array NotificationTransportInterface $transports
+     * @param array $recipients
+     * @param integer $key notification key
+     * @param integer $key_id The foreign instance id
      * @return bool Returns TRUE on success, FALSE on failure
      */
     public static function warning(array $transports, array $recipients, $key, $key_id = null)
@@ -88,9 +87,10 @@ abstract class Notification extends Model
     /**
      * Creates an error notification
      *
-     * @param string $key
-     * @param integer $user_id The user id that will get the notification
-     * @param integer $key_id The notification key id
+     * @param array NotificationTransportInterface $transports
+     * @param array $recipients
+     * @param integer $key notification key
+     * @param integer $key_id The foreign instance id
      * @return bool Returns TRUE on success, FALSE on failure
      */
     public static function error(array $transports, array $recipients, $key, $key_id = null)
@@ -100,9 +100,10 @@ abstract class Notification extends Model
     /**
      * Creates a success notification
      *
-     * @param string $key
-     * @param integer $user_id The user id that will get the notification
-     * @param integer $key_id The notification key id
+     * @param array NotificationTransportInterface $transports
+     * @param array $recipients
+     * @param integer $key notification key
+     * @param integer $key_id The foreign instance id
      * @return bool Returns TRUE on success, FALSE on failure
      */
     public static function success(array $transports, array $recipients, $key, $key_id = null)
