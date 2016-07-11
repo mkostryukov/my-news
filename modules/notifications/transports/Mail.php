@@ -1,11 +1,11 @@
 <?php
 namespace app\modules\notifications\transports;
 
-use app\models\User;
 use Yii;
 use app\modules\notifications\models\Notification;
+use app\models\User;
 
-class Mail extends NotificationTransport
+class Mail implements NotificationTransportInterface
 {
     /** @var string */
     public $viewPath = '@app/modules/notifications/views/mail';

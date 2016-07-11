@@ -13,4 +13,12 @@ class User extends BaseUser
 		$auth->assign($authUser, $this->owner->getId());
 	}
 	
+	public static function findByRole()
+	{
+		return static::find()
+			->join('LEFT JOIN','auth_assignment','auth_assignment.user_id = id')
+			->where(['auth_assignment.item_name' => $role->name])
+			->all();	
+	}
+	
 }

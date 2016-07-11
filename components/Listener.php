@@ -15,10 +15,7 @@ class Listener extends Component
 	
 	public function notify ($event)
 	{
-/*		echo '<pre>';
-		print_r($event->sender);
-		echo '<pre>';
-*/		$senderClass = $event->sender->className($event->sender);
+		$senderClass = $event->sender->className($event->sender);
 		switch ($senderClass) {
 			case 'app\models\Article':
 				$key = Notification::KEY_NEW_ARTICLE;
