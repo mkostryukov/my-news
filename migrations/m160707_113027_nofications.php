@@ -35,8 +35,8 @@ class m160707_113027_nofications extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%notify_user}}');
         $this->dropTable('{{%notify_transport}}');
+        $this->dropTable('{{%notify_user}}');
 
         return true;
     }
