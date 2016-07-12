@@ -37,7 +37,7 @@ class User extends BaseUser
         }
 		$names = [];
 		foreach ($this->_transports as $transport)
-			$names[$transport->getName()] = $transport->getName();
+			$names[$transport->getId()] = $transport->getName();
 		return $names;
 	}
 	
@@ -48,12 +48,12 @@ class User extends BaseUser
 	
     public function getNotificationKeys()
 	{
-		return Notification::$keys;
+        return Notification::$key_titles;
 	}
 	
 	protected function defaultTransports()
     {
-        /* @var $collection app\modules\notifications\Collection */
+        /* @var $collection app\modules\notifications\NotificationTransportInterface */
         $collection = Yii::$app->get($this->transportCollection);
 
 		return $collection->getTransports();

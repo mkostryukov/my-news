@@ -4,32 +4,62 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 
-/* @var $this yii\web\View */
-/* @var $model app\models\UserNotifications */
-/* @var $form ActiveForm */
+/*
+ * @var $this  yii\web\View
+ * @var $form  yii\widgets\ActiveForm
+ * @var $model dektrium\user\models\SettingsForm
+ */
+
+$this->title = Yii::t('user', 'Notifications settings');
+$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="notifications">
 
-    <?php $form = ActiveForm::begin(); ?>
+<?= $this->render('/_alert', ['module' => Yii::$app->getModule('user')]) ?>
 
-		<?= Html::activeHiddenInput($model, 'id') ?>
-		<?  $names = $model->getTransportNames(); ?>
-		<?= $form->field($model, 'transports')->listBox(
-			$names,
-			[
-				'multiple' => true
-			]
-			) ?>
-		<?= $form->field($model, 'notifications')->listBox(
-			$model->NotificationKeys,
-			[
-				'multiple' => true
-			]
-			) ?>
-    
-        <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Submit'), ['class' => 'btn btn-primary']) ?>
-        </div>
-    <?php ActiveForm::end(); ?>
+<div class="row">
+	<div class="col-md-3">
+		<?= $this->render('_menu') ?>
+	</div>
+	<div class="col-md-9">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<?= Html::encode($this->title) ?>
+			</div>
+			<div class="panel-body">
 
-</div><!-- notifications -->
+			<?php $form = ActiveForm::begin([
+				'id'          => 'notifications-form',
+				'options'     => ['class' => 'form-horizontal'],
+				'fieldConfig' => [
+					'template'     => "{label}\n<div class=\"col-lg-9\">{input}</div>\n<div class=\"col-sm-offset-3 col-lg-9\">{error}\n{hint}</div>",
+					'labelOptions' => ['class' => 'col-lg-3 control-label'],
+				],
+				'enableAjaxValidation'   => true,
+				'enableClientValidation' => false,
+			]); ?>
+
+				<?= Html::activeHiddenInput($model, 'id') ?>
+				<?  $names = $model->getTransportNames(); ?>
+				<?= $form->field($model, 'transports', [
+                  //      'template' => "{label}\n<div class=\"col-lg-9\">{input}</div>\n{error}\n{hint}",
+                    ])->checkboxList($names, [
+                        'tag' => "div style=\"padding-top: 7px;\"",
+                        'separator' => '<br />',
+                ]) ?>
+				<?= $form->field($model, 'notifications')->checkboxList($model->NotificationKeys, [
+                        'tag' => "div style=\"padding-top: 7px;\"",
+                        'separator' => '<br />',
+                    ]
+					) ?>
+
+				<div class="form-group">
+					<div class="col-lg-offset-3 col-lg-9">
+						<?= Html::submitButton(Yii::t('user', 'Save'), ['class' => 'btn btn-block btn-success']) ?><br>
+					</div>
+				</div>
+			<?php ActiveForm::end(); ?>
+
+			</div>
+		</div>
+	</div>
+</div>

@@ -28,25 +28,34 @@ class Notification extends BaseNotification
         self::KEY_NEW_ARTICLE,
         self::KEY_MESSAGE,
     ];
+
+    public static $key_titles = [
+        self::KEY_NEW_USER => 'New user created',
+        self::KEY_NEW_ARTICLE => 'New article created',
+        self::KEY_MESSAGE => 'Message received',
+    ];
 	
     /**
      * @inheritdoc
      */
     public function getTitle()
     {
-        switch ($this->key) {
+        if (in_array($this->key, self::$key_titles))
+            return self::$key_titles[$this->key];
+        
+/*        switch ($this->key) {
             case self::KEY_NEW_USER:
                 return Yii::t('app', 'New user created');
 
             case self::KEY_NEW_ARTICLE:
                 return Yii::t('app', 'New article created');
 
-/*            case self::KEY_MESSAGE:
+            case self::KEY_MESSAGE:
                 $message = Message::findOne($this->key_id);
                 return Yii::t('app', 'Message: {title}'. [
                         'title' => $message->title
-                    ]);*/
-        }
+                    ]);
+        }*/
 
         return "Unknown key: $this->key";
     }

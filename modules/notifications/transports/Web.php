@@ -25,6 +25,14 @@ class Web extends BaseNotificationTransport
     /**
      * @inheritdoc
      */
+    protected function defaultName()
+    {
+        return 'Web notifications';
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function tableName()
     {
         return '{{%notification}}';

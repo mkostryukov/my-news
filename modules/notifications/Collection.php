@@ -4,6 +4,7 @@ namespace app\modules\notifications;
 use Yii;
 use yii\base\Component;
 use yii\base\InvalidParamException;
+use app\modules\notifications\transports\NotificationTransportInterface;
 
 /**
  * Collection is a storage for all notification transports in the application.
@@ -90,11 +91,14 @@ class Collection extends Component
      * Creates notification transport instance from its array configuration.
      * @param string $id notification transport id.
      * @param array $config notification transport instance configuration.
-     * @return transportInterface notification transport instance.
+     * @return NotificationTransportInterface notification transport instance.
      */
     protected function createTransport($id, $config)
     {
         $config['id'] = $id;
-        return Yii::createObject($config);
+
+        $obj =  Yii::createObject($config);
+        $obj->setId($id);
+        return $obj;
     }
 }

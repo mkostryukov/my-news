@@ -17,7 +17,7 @@ abstract class BaseNotificationTransport implements NotificationTransportInterfa
      * @var string transport name.
      * This value may be used in database records, CSS files and so on.
      */
-	private $_name;	
+	private $_name;
 
     /**
      * @param string $id transport id.

@@ -11,7 +11,7 @@ $config = [
 			'class' => 'app\modules\notifications\Collection',
 			'transports' => [
 				'mail' => [
-					'class' => 'app\modules\notifications\transports\Mail'
+					'class' => 'app\modules\notifications\transports\Mail',
 				],
 				'web' => [
 					'class' => 'app\modules\notifications\transports\Web',

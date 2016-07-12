@@ -26,7 +26,15 @@ class Mail extends BaseNotificationTransport
     public function getNotification() {
         return $this->notification;
     }
-    
+
+    /**
+     * @inheritdoc
+     */
+    protected function defaultName()
+    {
+        return 'Mail notification';
+    }
+
     /**
      * @return string
      */
