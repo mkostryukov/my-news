@@ -2,9 +2,8 @@
 namespace app\modules\notifications\transports;
 
 use Yii;
-use app\modules\notifications\NotificationTransportInterface;
-use app\modules\notifications\models\Notification;
 use yii\db\ActiveRecord;
+use app\modules\notifications\models\Notification;
 
 /**
  * This is the model class for table "notification".
@@ -17,8 +16,8 @@ use yii\db\ActiveRecord;
  * @property string $created_at
  * @property integer $user_id
  */
-class Web extends ActiveRecord implements NotificationTransportInterface
-{
+class Web extends BaseNotificationTransport
+{		
     public function sendNotification(Notification $notification) {
         
     }

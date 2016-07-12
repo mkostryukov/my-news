@@ -16,7 +16,7 @@ use yii\base\InvalidParamException;
  *         'class' => 'app\modules\notifications\Collection',
  *         'transports' => [
  *             'mail' => [
- *                 'class' => 'app\modules\notifications\transports\Mail'
+ *                 'class' => 'app\modules\notifications\transports\Mail',
  *             ],
  *             'web' => [
  *                 'class' => 'app\modules\notifications\transports\Web',
@@ -52,7 +52,7 @@ class Collection extends Component
     public function getTransports()
     {
         $transports = [];
-        foreach ($this->_transports as $id => $transports) {
+        foreach ($this->_transports as $id => $transport) {
             $transports[$id] = $this->getTransport($id);
         }
 
@@ -95,7 +95,6 @@ class Collection extends Component
     protected function createTransport($id, $config)
     {
         $config['id'] = $id;
-
         return Yii::createObject($config);
     }
 }

@@ -12,31 +12,33 @@ class m160707_113027_nofications extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%notify_user}}', [
+        $this->createTable('{{%user_notifications}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
-			'key' => $this->string()->notNull()->defaultValue('info'),
+			'key' => $this->string()->notNull(),
+            'transport_id' => $this->string()->notNull(),
             'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
         ], $tableOptions);
 
-        $this->addForeignKey('fk_notify_user', '{{%notify_user}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+        $this->addForeignKey('fk_user', '{{%user_notifications}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 
-        $this->createTable('{{%notify_transport}}', [
+        $this->createTable('{{%notification}}', [
             'id' => $this->primaryKey(),
-            'notify_user_id' => $this->integer()->notNull(),
-            'transport_id' => $this->string()->notNull()->defaultValue('info'),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull()
+            'user_id' => $this->integer()->notNull(),
+			'type' => $this->string()->notNull(),
+			'key' => $this->string()->notNull(),
+			'key_id' => $this->string()->notNull(),
+			'seen' => $this->boolean()->notNull(),
+			'created_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_notify_transport', '{{%notify_transport}}', 'notify_user_id', '{{%notify_user}}', 'id', 'CASCADE', 'RESTRICT');
-    }
+        $this->addForeignKey('fk_user_notify', '{{%notification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+	}
 
     public function down()
     {
-        $this->dropTable('{{%notify_transport}}');
-        $this->dropTable('{{%notify_user}}');
+		$this->dropTable('{{%user_notifications}}');
+		$this->dropTable('{{%notification}}');
 
         return true;
     }

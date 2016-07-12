@@ -7,6 +7,17 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log', 'listener'],
     'components' => [
+		'notificationTransportCollection' => [
+			'class' => 'app\modules\notifications\Collection',
+			'transports' => [
+				'mail' => [
+					'class' => 'app\modules\notifications\transports\Mail'
+				],
+				'web' => [
+					'class' => 'app\modules\notifications\transports\Web',
+				],
+			],
+		],
 		'view' => [
 			'theme' => [
 				'pathMap' => [
@@ -70,6 +81,9 @@ $config = [
 					'class' => 'app\models\User',
 					'on ' . yii\db\BaseActiveRecord::EVENT_AFTER_INSERT => ['app\models\User', 'setDefaultRole'],
 				],
+			],
+			'controllerMap' => [
+				'settings' => 'app\controllers\user\SettingsController'
 			],
 		],
 		'rbac' => [

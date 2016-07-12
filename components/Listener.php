@@ -25,6 +25,9 @@ class Listener extends Component
 			case 'app\models\User':
 				$key = Notification::KEY_NEW_USER;
 				break;
+			case 'app\models\Message':
+				$key = Notification::KEY_MESSAGE;
+				break;
 			default:
 				return false;
 		}

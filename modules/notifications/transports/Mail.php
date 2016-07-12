@@ -2,12 +2,12 @@
 namespace app\modules\notifications\transports;
 
 use Yii;
-use app\modules\notifications\NotificationTransportInterface;
 use app\modules\notifications\models\Notification;
 
-class Mail implements NotificationTransportInterface
+class Mail extends BaseNotificationTransport
 {
-    /** @var string */
+	
+	/** @var string */
     public $viewPath = '@app/modules/notifications/views/mail';
 
     /** @var string|array Default: `Yii::$app->params['adminEmail']` OR `no-reply@example.com` */

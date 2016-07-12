@@ -6,6 +6,64 @@ use dektrium\user\models\User as BaseUser;
 
 class User extends BaseUser
 {
+    public $transportCollection = 'notificationTransportCollection';
+
+	private $_notifications = [];
+
+	private $_transports;
+	
+	public function getNotifications()
+	{
+		return $this->_notifications;
+	}
+	
+	public function setNotifications($notifications)
+	{
+		$this->_notifications = $notifications;
+	}
+	
+	public function getTransports()
+	{
+       if ($this->_transports === null) {
+            $this->_transports = $this->defaultTransports();
+        }
+		return $this->_transports;
+	}
+	
+	public function getTransportNames()
+	{
+       if ($this->_transports === null) {
+            $this->_transports = $this->defaultTransports();
+        }
+		$names = [];
+		foreach ($this->_transports as $transport)
+			$names[$transport->getName()] = $transport->getName();
+		return $names;
+	}
+	
+	public function setTransports($transports)
+	{
+		return $this->_transports;
+	}
+	
+    public function getNotificationKeys()
+	{
+		return Notification::$keys;
+	}
+	
+	protected function defaultTransports()
+    {
+        /* @var $collection app\modules\notifications\Collection */
+        $collection = Yii::$app->get($this->transportCollection);
+
+		return $collection->getTransports();
+    }
+	
+	public function formName()
+	{
+		return 'form-notifications';
+	}
+
 	public function setDefaultRole()
 	{
 		$auth = Yii::$app->authManager;
@@ -21,15 +79,9 @@ class User extends BaseUser
 			->all();	
 	}
 
-	public function getNotifications()
+	public function getUserNotifications()
 	{
-		return $this->hasMany(NotifyUser::className(), ['user_id' => 'id']);
-	}
-
-	public function getTransports()
-	{
-		return $this->hasMany(NotifyTransport::className(), ['notify_user_id' => 'id'])
-			->viaTable('{{%notify_user}}', ['user_id' => 'id']);
+		return $this->hasMany(UserNotifications::className(), ['user_id' => 'id']);
 	}
 	
 }

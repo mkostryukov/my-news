@@ -3,27 +3,28 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%notify_user}}".
+ * This is the model class for table "{{%user_notifications}}".
  *
  * @property integer $id
  * @property integer $user_id
  * @property string $key
+ * @property string $transport_id
  * @property integer $created_at
- * @property integer $updated_at
  *
- * @property NotifyTransport[] $notifyTransports
  * @property User $user
  */
-class NotifyUser extends \yii\db\ActiveRecord
+class UserNotifications extends ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%notify_user}}';
+        return '{{%user_notifications}}';
     }
 
     /**
@@ -32,9 +33,10 @@ class NotifyUser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'created_at', 'updated_at'], 'required'],
-            [['user_id', 'created_at', 'updated_at'], 'integer'],
+            [['user_id', 'key', 'transport_id'], 'required'],
+            [['user_id', 'created_at'], 'integer'],
             [['key'], 'string', 'max' => 255],
+            [['transport_id'], 'string', 'max' => 255],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -48,17 +50,9 @@ class NotifyUser extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'user_id' => Yii::t('app', 'User ID'),
             'key' => Yii::t('app', 'Key'),
+            'transport_id' => Yii::t('app', 'Transport'),
             'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNotifyTransports()
-    {
-        return $this->hasMany(NotifyTransport::className(), ['notify_user_id' => 'id']);
     }
 
     /**

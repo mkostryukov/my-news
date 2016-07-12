@@ -1,27 +1,37 @@
 <?php
 namespace app\controllers\user;
 
-use dektrium\user\controllers\AdminController as BaseAdminController;
+use Yii;
+use dektrium\user\controllers\SettingsController as BaseSettingsController;
+use app\models\UserNotifications;
 
 class SettingsController extends BaseSettingsController
 {
+	public function behaviors()
+	{
+		$ret = parent::behaviors();
+		$ret['access']['rules'][] = [
+                        'allow'   => true,
+                        'actions' => ['notifications'],
+                        'roles'   => ['@'],
+                    ];
+		return $ret;
+	}
+
     public function actionNotifications()
     {
-        /** @var SettingsForm $model */
-        $model = Yii::createObject(NotificationsForm::className());
-        $event = $this->getFormEvent($model);
+        $model = $this->finder->findUserById(Yii::$app->user->identity->getId());
 
-        $this->performAjaxValidation($model);
+		if ($model->load(Yii::$app->request->post())) {
+			if ($model->validate()) {
+				// form inputs are valid, do something here
+				return;
+			}
+		}
 
-        $this->trigger(self::EVENT_BEFORE_NOTIFICATIONS_UPDATE, $event);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', Yii::t('user', 'Your notifications details have been updated'));
-            $this->trigger(self::EVENT_AFTER_NOTIFICATIONS_UPDATE, $event);
-            return $this->refresh();
-        }
-
-        return $this->render('notifications', [
-            'model' => $model,
-        ]);        
+		return $this->render('notifications', [
+			'model' => $model,
+		]);
     }
+
 }
