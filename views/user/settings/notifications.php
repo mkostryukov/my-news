@@ -41,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?= Html::activeHiddenInput($model, 'id') ?>
 				<?  $names = $model->getTransportNames(); ?>
 				<?= $form->field($model, 'transports', [
-                  //      'template' => "{label}\n<div class=\"col-lg-9\">{input}</div>\n{error}\n{hint}",
                     ])->checkboxList($names, [
                         'tag' => "div style=\"padding-top: 7px;\"",
                         'separator' => '<br />',

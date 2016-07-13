@@ -79,9 +79,14 @@ class User extends BaseUser
 			->all();	
 	}
 
-	public function getUserNotifications()
+	public function getUserNotification()
 	{
-		return $this->hasMany(UserNotifications::className(), ['user_id' => 'id']);
+		return $this->hasMany(UserNotification::className(), ['user_id' => 'id']);
+	}
+	
+	public function getUserTransport()
+	{
+		return $this->hasMany(UserTransport::className(), ['user_id' => 'id']);
 	}
 	
 }

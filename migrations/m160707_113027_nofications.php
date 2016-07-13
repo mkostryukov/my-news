@@ -12,15 +12,21 @@ class m160707_113027_nofications extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        $this->createTable('{{%user_notifications}}', [
+        $this->createTable('{{%user_notification}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
 			'key' => $this->string()->notNull(),
-            'transport_id' => $this->string()->notNull(),
-            'created_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_user', '{{%user_notifications}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+        $this->addForeignKey('fk_user_notification', '{{%user_notification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+
+        $this->createTable('{{%user_transport}}', [
+            'id' => $this->primaryKey(),
+            'user_id' => $this->integer()->notNull(),
+            'transport_id' => $this->string()->notNull(),
+        ], $tableOptions);
+
+        $this->addForeignKey('fk_user_transport', '{{%user_transport}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 
         $this->createTable('{{%notification}}', [
             'id' => $this->primaryKey(),
@@ -37,7 +43,8 @@ class m160707_113027_nofications extends Migration
 
     public function down()
     {
-		$this->dropTable('{{%user_notifications}}');
+		$this->dropTable('{{%user_notification}}');
+		$this->dropTable('{{%user_transport}}');
 		$this->dropTable('{{%notification}}');
 
         return true;
