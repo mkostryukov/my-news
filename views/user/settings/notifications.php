@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'template'     => "{label}\n<div class=\"col-lg-9\">{input}</div>\n<div class=\"col-sm-offset-3 col-lg-9\">{error}\n{hint}</div>",
 					'labelOptions' => ['class' => 'col-lg-3 control-label'],
 				],
-				'enableAjaxValidation'   => true,
+				'enableAjaxValidation'   => false,
 				'enableClientValidation' => false,
 			]); ?>
 
@@ -42,10 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?= $form->field($model, 'transports', [
                     ])->checkboxList($model->transportNames, [
                         'tag' => "div style=\"padding-top: 7px;\"",
+                        'unselect' => 'none',
                         'separator' => '<br />',
                 ]) ?>
 				<?= $form->field($model, 'notifications')->checkboxList($model->NotificationKeys, [
                         'tag' => "div style=\"padding-top: 7px;\"",
+                        'unselect' => 'none',
                         'separator' => '<br />',
                     ]
 					) ?>
