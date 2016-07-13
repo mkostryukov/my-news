@@ -24,24 +24,18 @@ class Notification extends BaseNotification
      * @var array Holds all usable notifications
      */
     public static $keys = [
-        self::KEY_NEW_USER,
-        self::KEY_NEW_ARTICLE,
-        self::KEY_MESSAGE,
-    ];
-
-    public static $key_titles = [
         self::KEY_NEW_USER => 'New user created',
         self::KEY_NEW_ARTICLE => 'New article created',
         self::KEY_MESSAGE => 'Message received',
     ];
-	
+
     /**
      * @inheritdoc
      */
     public function getTitle()
     {
         if (in_array($this->key, self::$key_titles))
-            return self::$key_titles[$this->key];
+            return self::$keys[$this->key];
         
 /*        switch ($this->key) {
             case self::KEY_NEW_USER:

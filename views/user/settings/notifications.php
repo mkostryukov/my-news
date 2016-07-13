@@ -38,10 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				'enableClientValidation' => false,
 			]); ?>
 
-				<?= Html::activeHiddenInput($model, 'id') ?>
-				<?  $names = $model->getTransportNames(); ?>
+				<?= Html::activeHiddenInput($model, 'user_id') ?>
 				<?= $form->field($model, 'transports', [
-                    ])->checkboxList($names, [
+                    ])->checkboxList($model->transportNames, [
                         'tag' => "div style=\"padding-top: 7px;\"",
                         'separator' => '<br />',
                 ]) ?>

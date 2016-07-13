@@ -41,7 +41,7 @@ class NotificationsModule extends Module
      */
     public static function notify($notificationClass, $transports, $recipients, $key, $key_id = null, $type = Notification::TYPE_DEFAULT)
     {
-        if (!in_array($key, $notificationClass::$keys)) {
+        if (!array_key_exists($key, $notificationClass::$keys)) {
             throw new Exception("Not a registered notification key: $key");
         }
         if (!in_array($type, Notification::$types)) {

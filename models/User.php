@@ -59,11 +59,6 @@ class User extends BaseUser
 		return $collection->getTransports();
     }
 	
-	public function formName()
-	{
-		return 'form-notifications';
-	}
-
 	public function setDefaultRole()
 	{
 		$auth = Yii::$app->authManager;

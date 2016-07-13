@@ -3,7 +3,7 @@ namespace app\controllers\user;
 
 use Yii;
 use dektrium\user\controllers\SettingsController as BaseSettingsController;
-use app\models\UserNotifications;
+use app\models\NotificationsForm;
 
 class SettingsController extends BaseSettingsController
 {
@@ -20,12 +20,16 @@ class SettingsController extends BaseSettingsController
 
     public function actionNotifications()
     {
-        $model = $this->finder->findUserById(Yii::$app->user->identity->getId());
+        $model = new NotificationsForm();
 
 		if ($model->load(Yii::$app->request->post())) {
+				echo '<pre>';
+				print_r(Yii::$app->request->post());
+				echo '</pre>';
+				die();
 			if ($model->validate()) {
 				// form inputs are valid, do something here
-				return;
+				$this->refresh();
 			}
 		}
 
