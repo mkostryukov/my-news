@@ -42,12 +42,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?= $form->field($model, 'transports', [
                     ])->checkboxList($model->transportNames, [
                         'tag' => "div style=\"padding-top: 7px;\"",
-                        'unselect' => 'none',
                         'separator' => '<br />',
                 ]) ?>
 				<?= $form->field($model, 'notifications')->checkboxList($model->NotificationKeys, [
                         'tag' => "div style=\"padding-top: 7px;\"",
-                        'unselect' => 'none',
                         'separator' => '<br />',
                     ]
 					) ?>

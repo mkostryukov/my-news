@@ -11,10 +11,19 @@ use app\models\User;
 
 class Listener extends Component
 {
+	/**
+	 * Set up event listener
+	 */
 	public function init() {
 		Event::on(ActiveRecord::className(), ActiveRecord::EVENT_AFTER_INSERT, ['app\components\Listener', 'notify']);		
 	}
 
+	/**
+	 * Sends notification based on event sender class
+	 *
+	 * @param $event
+	 * @return bool
+	 */
 	public static function notify($event)
 	{
 		$senderClass = $event->sender->className($event->sender);
@@ -31,36 +40,25 @@ class Listener extends Component
 			default:
 				return false;
 		}
-		$user = self::findModel(Yii::$app->user->identity->getId());
-        $transports = $user->transports;
-        echo '<pre>';
-        print_r($transports);
-        echo '</pre>';
-        die();
-		$to = new \StdClass();
-		$to->email = 'mega@dlp.ru';
-		Notification::notify(['app\modules\notifications\transports\Mail'], [$to], $key, $event->sender->id);
+		$users = self::getRecipients($key);
+//		Notification::notify($recipients, $key, $event->sender->id);
 	}
 
     /**
-     * Finds the User model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     * Finds the User models based on notification key.
      *
-     * @param int $id
+     * @param string $key
      *
-     * @return User the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
+     * @return array User the loaded model
      */
-    protected static function findModel($id)
+    protected static function getRecipients($key)
     {
-        $user = User::find()
-            ->where(['id' => $id])
-            ->one();
-        if ($user === null) {
-            throw new NotFoundHttpException('The requested page does not exist');
-        }
-
-        return $user;
+        $users = User::find()
+			->joinWith('userTransport')
+			->joinWith('userNotification')
+			->where(['{{%user_notification}}.key' => $key])
+			->all();
+        return $users;
     }
 
 }

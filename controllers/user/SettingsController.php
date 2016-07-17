@@ -1,7 +1,6 @@
 <?php
 namespace app\controllers\user;
 
-use app\models\UserTransport;
 use Yii;
 use dektrium\user\controllers\SettingsController as BaseSettingsController;
 use app\models\NotificationsForm;
@@ -22,17 +21,10 @@ class SettingsController extends BaseSettingsController
     public function actionNotifications()
     {
         $model = new NotificationsForm();
- /*       				echo '<pre>';
-                        print_r($model);
-                        echo '</pre>';
-                        die();*/
 
-		if ($model->load(Yii::$app->request->post())) {
-			if ($model->validate()) {
-				// form inputs are valid, do something here
-				$model->save();
-				$this->refresh();
-			}
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->getSession()->setFlash('success', Yii::t('user', 'Your notifications settings have been updated'));
+			return $this->refresh();
 		}
 
 		return $this->render('notifications', [

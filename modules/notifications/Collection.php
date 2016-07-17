@@ -12,20 +12,26 @@ use app\modules\notifications\transports\NotificationTransportInterface;
  * Example application configuration:
  *
  * ```php
- * 'components' => [
- *     'notificationTransportCollection' => [
- *         'class' => 'app\modules\notifications\Collection',
- *         'transports' => [
- *             'mail' => [
- *                 'class' => 'app\modules\notifications\transports\Mail',
+ *    'modules => [
+ *        'notifications' => [
+ *             'class' => '...',
+ *             'components' => [
+ *                 'notificationTransportCollection' => [
+ *                     'class' => 'app\modules\notifications\Collection',
+ *                     'transports' => [
+ *                         'mail' => [
+ *                             'class' => 'app\modules\notifications\transports\Mail',
+ *                         ],
+ *                         'web' => [
+ *                             'class' => 'app\modules\notifications\transports\Web',
+ *                         ],
+ *                     ],
+ *                 ],
  *             ],
- *             'web' => [
- *                 'class' => 'app\modules\notifications\transports\Web',
- *             ],
+ *             ...
  *         ],
- *     ]
- *     ...
- * ]
+ *         ...
+ *     ],
  * ```
  *
  * @property NotificationTransportInterface[] $transports List of notification transports. This property is read-only.

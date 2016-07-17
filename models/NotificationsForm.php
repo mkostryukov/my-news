@@ -27,14 +27,29 @@ class NotificationsForm extends Model
     private $_user;
 
     /** @inheritdoc */
-    public function __construct($config = [])
+    public function __construct(User $user = null, $config = [])
     {
-        $this->setAttributes([
-            'user_id' => Yii::$app->user->identity->getId(),
-            'notifications' => $this->getUserNotifications(),
-            'transports' => $this->getUserTransports(),
-        ], false);
+        if ($user) {
+            $this->setUser($user);
+            $this->setAttributes([
+                'user_id' => $this->getUser()->getId(),
+                'notifications' => $this->getUserNotifications(),
+                'transports' => $this->getUserTransports(),
+            ], false);
+        }
+        else {
+            $this->setAttributes([
+                'user_id' => Yii::$app->user->identity->getId(),
+                'notifications' => $this->getUserNotifications(),
+                'transports' => $this->getUserTransports(),
+            ], false);
+        }
         parent::__construct($config);
+    }
+
+    public function setUser($user)
+    {
+        $this->_user = $user;
     }
 
     /** @return User */
@@ -94,10 +109,14 @@ class NotificationsForm extends Model
     /** @inheritdoc */
     public function rules()
     {
+        $transportKeys = array_keys($this->getTransportNames());
+        $notificationsKeys = array_keys($this->getNotificationKeys());
         return [
 			'useridRequired' => ['user_id', 'required'],
-//            'transportStringArray' => ['transports', 'each', 'rule' => ['string']],
-//            'notificationsStringArray' => ['notifications', 'each', 'rule' => ['string']],
+            ['transports', 'default', 'value' => []],
+            'transportExists' => ['transports', 'in', 'range' => $transportKeys, 'allowArray' => true],
+            ['notifications', 'default', 'value' => []],
+            'notificationExists' => ['notifications', 'in', 'range' => $notificationsKeys, 'allowArray' => true],
         ];
     }
 
@@ -123,13 +142,7 @@ class NotificationsForm extends Model
     public function save()
     {
         if ($this->validate()) {
-/*				echo '<pre>';
-				print_r($this);
-				echo '</pre>';
-				die();*/
             $user_transports = $this->user->userTransport;
-            if ($this->transports == 'none')
-                $this->transports = [];
             foreach ($this->transports as $key)
                 if (array_key_exists($key, $user_transports)) {
                     // transport already exists, remove it from deletion array
@@ -149,8 +162,6 @@ class NotificationsForm extends Model
                 $transport->unlink('user', $this->user, true);
 
             $user_notifications = $this->user->userNotification;
-            if ($this->notifications == 'none')
-                $this->notifications = [];
             foreach ($this->notifications as $key)
                 if (array_key_exists($key, $user_transports)) {
                     // transport already exists, remove it from deletion array

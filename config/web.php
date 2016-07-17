@@ -79,11 +79,13 @@ $config = [
 			'modelMap' => [
 				'User' => [
 					'class' => 'app\models\User',
-					'on ' . yii\db\BaseActiveRecord::EVENT_AFTER_INSERT => ['app\models\User', 'setDefaultRole'],
+					'on ' . dektrium\user\models\User::AFTER_CREATE => ['app\models\User', 'setDefaultRole'],
+					'on ' . dektrium\user\models\User::AFTER_REGISTER => ['app\models\User', 'setDefaultRole'],
 				],
 			],
 			'controllerMap' => [
-				'settings' => 'app\controllers\user\SettingsController'
+				'settings' => 'app\controllers\user\SettingsController',
+				'admin' => 'app\controllers\user\AdminController',
 			],
 		],
 		'rbac' => [
@@ -91,9 +93,8 @@ $config = [
 		],
 		'notifications' => [
 			'class' => 'app\modules\notifications\NotificationsModule',
-			// This callable should return your logged in user Id
 			'userId' => function() {
-				return \Yii::$app->user->id;
+				return \Yii::$app->user->identity->getId();
 				}
 			],
 		],
