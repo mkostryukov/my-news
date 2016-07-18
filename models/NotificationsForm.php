@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use app\modules\notifications\Module;
 
 /**
  * NotificationsForm gets user's notifications and transports and changes them.
@@ -101,9 +102,9 @@ class NotificationsForm extends Model
 	
 	protected function defaultTransports()
     {
-        $collection = Yii::$app->get($this->transportCollection);
-
-		return $collection->getTransports();
+        /** @var Module $module */
+        $module = \Yii::$app->getModule('notifications');
+		return $module->getTransports();
     }
 	
     /** @inheritdoc */

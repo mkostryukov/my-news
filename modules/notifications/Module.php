@@ -2,21 +2,29 @@
 namespace app\modules\notifications;
 
 use app\modules\notifications\transports\NotificationTransportInterface;
+use Yii;
 use Exception;
 use yii\base\Module as BaseModule;
 use app\modules\notifications\models\Notification;
 
 class Module extends BaseModule
 {
-    public $transportCollection = 'notificationTransportCollection';
-    /**
-     * @array transports The NotificationTransport class array defined by the application
-     */
-    public $notificationTranspors;
+    public $transportCollectionName = 'notificationTransportCollection';
     /**
      * @var callable|integer The current user id
      */
     public $userId;
+    /**
+     * @array transports The NotificationTransport class array defined by the application
+     */
+    private $_transports;
+    
+
+    public function getTransports()
+    {
+        return $this->_transports;
+    }
+    
     /**
      * @inheritdoc
      */
@@ -24,8 +32,11 @@ class Module extends BaseModule
         if (is_callable($this->userId)) {
             $this->userId = call_user_func($this->userId);
         }
+        $collection = Yii::$app->get($this->transportCollectionName);
+        $this->_transports = $collection->getTransports();
         parent::init();
     }
+    
     /**
      * Creates a notification
      *
@@ -33,11 +44,11 @@ class Module extends BaseModule
      * @return bool Returns TRUE on success, FALSE on failure
      * @throws Exception
      */
-    public static function notify(Notification $instance)
+    public function notify(Notification $instance)
     {
         $results = [];
         /** @var NotificationTransportInterface $transport */
-        foreach ($this->notificationTransports as $transport) {
+        foreach ($this->_transports as $transport) {
             $results[$transport->getName()] = $transport->sendNotification($instance);
         }
         return $results;

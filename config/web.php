@@ -92,7 +92,7 @@ $config = [
 			'class' => 'dektrium\rbac\Module',
 		],
 		'notifications' => [
-			'class' => 'app\modules\notifications\NotificationsModule',
+			'class' => 'app\modules\notifications\Module',
 			'userId' => function() {
 				return \Yii::$app->user->identity->getId();
 				}
