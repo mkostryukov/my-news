@@ -78,7 +78,7 @@ class BrowserNotificationWidget extends Widget
     /**
      * @var integer The time to leave the notification shown on screen
      */
-    public $delay = 20000;
+    public $delay = 5000;
     /**
      * @var integer the XHR timeout in milliseconds
      */

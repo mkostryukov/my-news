@@ -38,7 +38,7 @@ class m160707_113027_nofications extends Migration
 			'created_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_user_notify', '{{%browsernotification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+ //       $this->addForeignKey('fk_user_notify', '{{%browsernotification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 	}
 
     public function down()

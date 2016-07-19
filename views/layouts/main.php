@@ -66,7 +66,7 @@ BrowserNotificationWidget::widget([
         $menuItems[] = [
                 'label' => '<i class="fa fa-bell-o"></i>&nbsp;<span class="label label-warning notifications-icon-count">0</span>',
                 'items' => [
-                    ['label' => 'You have <span class="notifications-header-count">0</span> notifications', 'encode' => false],
+                    ['label' => 'You have <span class="notifications-header-count">0</span> notifications', 'encode' => false, 'options' => ['class' => 'header']],
                     ['label' => '<div id="notifications"></div>', 'encode' => false],
                 ],
                 'encode' => false,
