@@ -272,6 +272,7 @@ var Notifications = (function(options) {
      * Polls the server
      */
     this.poll = function() {
+        console.log('poll');
         $.ajax({
             url: this.opts.url,
             type: "GET",

@@ -86,7 +86,7 @@ class BrowserNotificationWidget extends Widget
     /**
      * @var integer The delay between pulls
      */
-    public $pollInterval = 50000;
+    public $pollInterval = 6000;
     /**
      * @var boolean Whether to show already seen notifications
      */
