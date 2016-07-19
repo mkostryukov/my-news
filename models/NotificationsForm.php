@@ -45,6 +45,8 @@ class NotificationsForm extends Model
                 'transports' => $this->getUserTransports(),
             ], false);
         }
+//        print_r($this->transports);
+//        die($this->transports);
         parent::__construct($config);
     }
 
@@ -65,22 +67,12 @@ class NotificationsForm extends Model
 
     public function getUserNotifications()
     {
-        $n = $this->user->userNotification;
-        foreach ($n as $key => $value) {
-            $n[$value->key] = $value->key;
-            unset($n[$key]);
-        }
-        return $n;
+        return array_keys($this->user->notifications);
     }
 
     public function getUserTransports()
     {
-        $n = $this->user->userTransport;
-        foreach ($n as $key => $value) {
-            $n[$value->transport_id] = $value->transport_id;
-            unset($n[$key]);
-        }
-        return $n;
+        return array_keys($this->user->transports);
     }
 
     /** @return array of available notification keys with titles */
@@ -143,13 +135,13 @@ class NotificationsForm extends Model
     public function save()
     {
         if ($this->validate()) {
-            $user_transports = $this->user->userTransport;
+            /** @var array UserTransport $user_transports */
+            $user_transports = $this->user->transports;
             foreach ($this->transports as $key)
                 if (array_key_exists($key, $user_transports)) {
                     // transport already exists, remove it from deletion array
                     unset($user_transports[$key]);
-                }
-                else {
+                } else {
                     // creating transport
                     $transport = Yii::createObject([
                         'class' => UserTransport::className(),
@@ -159,10 +151,12 @@ class NotificationsForm extends Model
                     $transport->link('user', $this->user);
                 }
             // delete unchecked user transports
+            /** @var UserTransport $transport */
             foreach ($user_transports as $transport)
                 $transport->unlink('user', $this->user, true);
 
-            $user_notifications = $this->user->userNotification;
+            /** @var array UserNotification $user_notifications */
+            $user_notifications = $this->user->notifications;
             foreach ($this->notifications as $key)
                 if (array_key_exists($key, $user_transports)) {
                     // transport already exists, remove it from deletion array
@@ -177,7 +171,8 @@ class NotificationsForm extends Model
                     ]);
                     $notification->link('user', $this->user);
                 }
-            // delete unchecked user transports
+            // delete unchecked user notifications
+            /** @var UserNotification $notification */
             foreach ($user_notifications as $notification)
                 $notification->unlink('user', $this->user, true);
 

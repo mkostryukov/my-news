@@ -48,7 +48,7 @@ class PageSizerListView extends ListView
             return '';
         }
 
-        $pageSize = $pagination->getpageSize();    
+        $pageSize = $pagination->getPageSize();
 		$params = $_GET;
  
 		if (isset($params[$pagination->pageParam]))

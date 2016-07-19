@@ -23,8 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'filterSelector' => 'select[name="per-page"]',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'title',
             'intro:ntext',
@@ -38,4 +36,3 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
-<?php echo \nterms\pagesize\PageSize::widget(); ?>

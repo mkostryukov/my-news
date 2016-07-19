@@ -8,8 +8,21 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\modules\notifications\widgets\BrowserNotificationWidget;
 
 AppAsset::register($this);
+
+BrowserNotificationWidget::widget([
+    'theme' => BrowserNotificationWidget::THEME_NOTIFIT,
+    'clientOptions' => [
+        'location' => 'br',
+    ],
+    'counters' => [
+        '.notifications-header-count',
+        '.notifications-icon-count'
+    ],
+    'listSelector' => '#notifications',
+]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -50,6 +63,14 @@ AppAsset::register($this);
 			'label' => 'User (' . Yii::$app->user->identity->username . ')',
 			'items' => $nestedmenuItems,
 		];
+        $menuItems[] = [
+                'label' => '<i class="fa fa-bell-o"></i>&nbsp;<span class="label label-warning notifications-icon-count">0</span>',
+                'items' => [
+                    ['label' => 'You have <span class="notifications-header-count">0</span> notifications', 'encode' => false],
+                    ['label' => '<div id="notifications"></div>', 'encode' => false],
+                ],
+                'encode' => false,
+            ];
 	}
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

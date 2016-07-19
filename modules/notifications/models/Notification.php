@@ -55,6 +55,17 @@ abstract class Notification extends Model
 
     abstract public function getRoute();
 
+    public function getRecipientsAddresses($transport)
+    {
+        if ($this->recipients == null)
+            return false;
+        
+        foreach ($this->recipients as $recipient)
+        {
+            
+        }
+        
+    }
     /**
      * Creates a notification
      *
@@ -83,7 +94,9 @@ abstract class Notification extends Model
             'type'          =>  $type,
         ]);
 
-        return Module::notify($instance);
+        /** @var Module $module */
+        $module = \Yii::$app->getModule('notifications');
+        return $module->notify($instance);
     }
     /**
      * Creates a warning notification

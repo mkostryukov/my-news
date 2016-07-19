@@ -1,13 +1,13 @@
 <?php
 namespace app\modules\notifications\controllers;
 
-use app\modules\notifications\components\Notification;
-use Exception;
 use Yii;
 use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\web\Response;
+use app\modules\notifications\models\Notification;
+use app\modules\notifications\models\Browsernotification;
 
 class NotificationsController extends Controller
 {
@@ -16,9 +16,9 @@ class NotificationsController extends Controller
      */
     private $user_id;
     /**
-     * @var array The NotificationTransport class name array
+     * @var string The notification class
      */
-    private $transports = [];
+    private $notificationClass;
     /**
      * @inheritdoc
      */
@@ -26,7 +26,7 @@ class NotificationsController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $this->user_id = $this->module->userId;
-        $this->transports = $this->module->transports;
+        $this->notificationClass = $this->module->notificationClass;
         parent::init();
     }
     /**
@@ -38,27 +38,28 @@ class NotificationsController extends Controller
     public function actionPoll($seen = 0)
     {
         /** @var Notification $class */
-		if (!is_array($this->notificationClasses))
-			throw new Exception("Notification classes shoul be array");
+        $models = Browsernotification::find()->where([
+            'user_id' => $this->user_id,
+            'seen' => $seen
+        ])->all();
         $results = [];
-		foreach ($this->transports as $class) {
-			$models = $class::find()->where([
-				'user_id' => $this->user_id,
-				'seen' => $seen
-			])->all();
-			foreach ($models as $model) {
-				/** @var Notification $model */
-				$results[] = [
-					'id' => $model->id,
-					'type' => $model->type,
-					'title' => $model->getTitle(),
-					'description' => $model->getDescription(),
-					'url' => Url::to(['notifications/rnr', 'id' => $model->id]),
-					'key' => $model->key,
-					'date' => $model->created_at
-				];
-			}
-		}
+        foreach ($models as $model) {
+            /** @var Notification $notification */
+            $notification = new $this->notificationClass([
+                    'key' => $model->key,
+                    'key_id' => $model->key_id,
+            ]);
+            /** @var Notification $model */
+            $results[] = [
+                'id' => $model->id,
+                'type' => $model->type,
+                'title' => $notification->getTitle(),
+                'description' => $notification->getDescription(),
+                'url' => Url::to(['notifications/rnr', 'id' => $model->id]),
+                'key' => $model->key,
+                'date' => date('Y-m-d H:i:s', $model->created_at),
+            ];
+        }
         return $results;
     }
     /**
@@ -71,7 +72,12 @@ class NotificationsController extends Controller
      */
     public function actionRnr($id)
     {
-        $notification = $this->actionRead($id);
+        $model = $this->actionRead($id);
+        /** @var Notification $notification */
+        $notification = new $this->notificationClass([
+            'key' => $model->key,
+            'key_id' => $model->key_id,
+        ]);
         return $this->redirect(Url::to($notification->getRoute()));
     }
     /**
@@ -84,10 +90,10 @@ class NotificationsController extends Controller
      */
     public function actionRead($id)
     {
-        $notification = $this->getNotification($id);
-        $notification->seen = 1;
-        $notification->save();
-        return $notification;
+        $model = $this->getNotification($id);
+        $model->seen = 1;
+        $model->save();
+        return $model;
     }
     /**
      * Deletes a notification
@@ -99,28 +105,27 @@ class NotificationsController extends Controller
      */
     public function actionDelete($id)
     {
-        $notification = $this->getNotification($id);
-        return $notification->delete();
+        $model = $this->getNotification($id);
+        return $model->delete();
     }
     /**
      * Gets a notification by id
      *
      * @param int $id The notification id
-     * @return Notification
+     * @return Browsernotification
      * @throws HttpException Throws an exception if the notification is not
      *         found, or if it don't belongs to the logged in user
      */
     private function getNotification($id)
     {
         /** @var Notification $notification */
-        $class = $this->notificationClass;
-        $notification = $class::findOne($id);
-        if (!$notification) {
+        $model = Browsernotification::findOne($id);
+        if (!$model) {
             throw new HttpException(404, "Unknown notification");
         }
-        if ($notification->user_id != $this->user_id) {
+        if ($model->user_id != $this->user_id) {
             throw new HttpException(500, "Not your notification");
         }
-        return $notification;
+        return $model;
     }
 }

@@ -5,7 +5,6 @@ use Yii;
 use yii\base\Event;
 use yii\base\Component;
 use yii\db\ActiveRecord;
-use yii\web\NotFoundHttpException;
 use app\models\Notification;
 use app\models\User;
 
@@ -40,8 +39,7 @@ class Listener extends Component
 			default:
 				return false;
 		}
-		$users = self::getRecipients($key);
-//		Notification::notify($recipients, $key, $event->sender->id);
+		Notification::notify(self::getRecipients($key), $key, $event->sender->id);
 	}
 
     /**
@@ -53,12 +51,12 @@ class Listener extends Component
      */
     protected static function getRecipients($key)
     {
-        $users = User::find()
-			->joinWith('userTransport')
-			->joinWith('userNotification')
+        $recipients = User::find()
+			->joinWith('transports')
+			->joinWith('notifications')
 			->where(['{{%user_notification}}.key' => $key])
 			->all();
-        return $users;
+        return $recipients;
     }
 
 }

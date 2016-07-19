@@ -9,21 +9,43 @@ use app\modules\notifications\models\Notification;
 
 class Module extends BaseModule
 {
+    /**
+     * @var string name of the transport collection application component.
+     * This component will be used to fetch services value if it is not set.
+     */
     public $transportCollectionName = 'notificationTransportCollection';
+
+    /**
+     * @var string The controllers namespace
+     */
+    public $controllerNamespace = 'app\modules\notifications\controllers';
+
     /**
      * @var callable|integer The current user id
      */
     public $userId;
+
     /**
-     * @array transports The NotificationTransport class array defined by the application
+     * @var Notification The notification class defined by the application
+     */
+    public $notificationClass;
+
+    /**
+     * @array _transports The NotificationTransportInterface class array defined by the application
      */
     private $_transports;
-    
 
     public function getTransports()
     {
         return $this->_transports;
     }
+	
+	public function getTransport($id)
+	{
+		if (isset($this->_transports[$id]))
+			return false;
+		return $this->_transports[$id];
+	}
     
     /**
      * @inheritdoc
@@ -49,7 +71,7 @@ class Module extends BaseModule
         $results = [];
         /** @var NotificationTransportInterface $transport */
         foreach ($this->_transports as $transport) {
-            $results[$transport->getName()] = $transport->sendNotification($instance);
+            $results[$transport->getId()] = $transport->sendNotification($instance);
         }
         return $results;
     }

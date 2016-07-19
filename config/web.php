@@ -13,8 +13,8 @@ $config = [
 				'mail' => [
 					'class' => 'app\modules\notifications\transports\Mail',
 				],
-				'web' => [
-					'class' => 'app\modules\notifications\transports\Web',
+				'browser' => [
+					'class' => 'app\modules\notifications\transports\Browser',
 				],
 			],
 		],
@@ -93,6 +93,7 @@ $config = [
 		],
 		'notifications' => [
 			'class' => 'app\modules\notifications\Module',
+			'notificationClass' => 'app\models\Notification',
 			'userId' => function() {
 				return \Yii::$app->user->identity->getId();
 				}

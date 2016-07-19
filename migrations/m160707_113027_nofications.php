@@ -28,24 +28,24 @@ class m160707_113027_nofications extends Migration
 
         $this->addForeignKey('fk_user_transport', '{{%user_transport}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 
-        $this->createTable('{{%notification}}', [
+        $this->createTable('{{%browsernotification}}', [
             'id' => $this->primaryKey(),
             'user_id' => $this->integer()->notNull(),
 			'type' => $this->string()->notNull(),
 			'key' => $this->string()->notNull(),
-			'key_id' => $this->string()->notNull(),
+			'key_id' => $this->integer()->notNull(),
 			'seen' => $this->boolean()->notNull(),
 			'created_at' => $this->integer()->notNull(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_user_notify', '{{%notification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
+        $this->addForeignKey('fk_user_notify', '{{%browsernotification}}', 'user_id', '{{%user}}', 'id', 'CASCADE', 'RESTRICT');
 	}
 
     public function down()
     {
 		$this->dropTable('{{%user_notification}}');
 		$this->dropTable('{{%user_transport}}');
-		$this->dropTable('{{%notification}}');
+		$this->dropTable('{{%browsernotification}}');
 
         return true;
     }

@@ -6,26 +6,26 @@ use app\modules\notifications\models\Notification;
 
 class Mail extends BaseNotificationTransport
 {
-	
+    /** Separate letter to each recipient. */
+    const SEPARATE_LETTERS = 'separate';
+
+    /** One letter for all recipients. */
+    const ONE_LETTER_FOR_ALL = 'allinone';
+
 	/** @var string */
     public $viewPath = '@app/modules/notifications/views/mail';
 
     /** @var string|array Default: `Yii::$app->params['adminEmail']` OR `no-reply@example.com` */
     public $sender;
 
+    /** @var int email sending method */
+    public $emailSendMethod = self::SEPARATE_LETTERS;
+
+    /** @var string */
+    protected $addressPropertyName = 'email';
+
     /** @var string */
     protected $subject = null;
-
-    /** @var Notification */
-    protected $notification;
-
-    public function setNotification(Notification $notification) {
-        $this->notification = $notification;
-    }
-    
-    public function getNotification() {
-        return $this->notification;
-    }
 
     /**
      * @inheritdoc
@@ -60,16 +60,25 @@ class Mail extends BaseNotificationTransport
      *
      * @return bool
      */
-    public function sendNotification(Notification $notification) {
+    public function sendNotification(Notification $notification, $view = 'default') {
+
         $addresses = [];
-        foreach ($notification->recipients as $recipient)
-            $addresses = $recipient->email;
-        return $this->sendMessage($addresses,
-            $notification->getTitle(),
-            'default',
-            ['notification' => $notification]
-        );
+        $results = [];
+        foreach ($notification->recipients as $recipient) {
+            if (array_key_exists($this->getId(), $recipient->transports)) {
+                $address = $recipient->{$this->addressPropertyName};
+                if ($this->emailSendMethod == self::SEPARATE_LETTERS)
+                    $results = $this->sendMessage([$address], $notification->getTitle(), $view, ['notification' => $notification]);
+                else
+                    $addresses[] = $address;
+            }
+        }
+        if ($this->emailSendMethod == self::SEPARATE_LETTERS)
+            return $results;
+        else
+            return $this->sendMessage($addresses, $notification->getTitle(), $view, ['notification' => $notification]);
 	}
+
     /**
      * @param string|array $to
      * @param string $subject

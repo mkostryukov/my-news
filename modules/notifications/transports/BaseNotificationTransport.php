@@ -19,6 +19,9 @@ abstract class BaseNotificationTransport implements NotificationTransportInterfa
      */
 	private $_name;
 
+    /** @var Notification */
+    protected $notification;
+
     /**
      * @param string $id transport id.
      */
@@ -67,9 +70,25 @@ abstract class BaseNotificationTransport implements NotificationTransportInterfa
     {
         return Inflector::camel2id(StringHelper::basename(get_class($this)));
     }
-	
+
+    /**
+     * Sets transport notification object
+     * @param Notification $notification
+     */
+    public function setNotification(Notification $notification) {
+        $this->notification = $notification;
+    }
+
+    /**
+     * @return Notification
+     */
+    public function getNotification() {
+        return $this->notification;
+    }
+
     /**
      * @param Notification $notification to be sent.
+     * @return bool true if successful
      */
     public function sendNotification(Notification $notification)
 	{

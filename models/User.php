@@ -21,14 +21,14 @@ class User extends BaseUser
 			->all();	
 	}
 
-	public function getUserNotification()
+	public function getNotifications()
 	{
-		return $this->hasMany(UserNotification::className(), ['user_id' => 'id']);
+		return $this->hasMany(UserNotification::className(), ['user_id' => 'id'])->indexBy('key');
 	}
 	
-	public function getUserTransport()
+	public function getTransports()
 	{
-		return $this->hasMany(UserTransport::className(), ['user_id' => 'id']);
+		return $this->hasMany(UserTransport::className(), ['user_id' => 'id'])->indexBy('transport_id');
 	}
 	
 }

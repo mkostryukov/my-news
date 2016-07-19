@@ -34,7 +34,7 @@ class Notification extends BaseNotification
      */
     public function getTitle()
     {
-        if (in_array($this->key, self::$key_titles))
+        if (array_key_exists($this->key, self::$keys))
             return self::$keys[$this->key];
         
 /*        switch ($this->key) {
@@ -89,11 +89,11 @@ class Notification extends BaseNotification
     {
         switch ($this->key) {
             case self::KEY_NEW_USER:
-				$route = 'user/admin/update';
+				$route = '/user/admin/update';
 				break;
 
             case self::KEY_NEW_ARTICLE:
-                $route = 'site/view';
+                $route = '/site/view';
 				break;
 
  /*           case self::KEY_MESSAGE:
