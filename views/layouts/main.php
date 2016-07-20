@@ -13,9 +13,9 @@ use app\modules\notifications\widgets\BrowserNotificationWidget;
 AppAsset::register($this);
 
 BrowserNotificationWidget::widget([
-    'theme' => BrowserNotificationWidget::THEME_NOTIFIT,
+    'theme' => BrowserNotificationWidget::THEME_TOASTR,
     'clientOptions' => [
-        'location' => 'br',
+        'location' => 'ru',
     ],
     'counters' => [
         '.notifications-header-count',
@@ -63,14 +63,19 @@ BrowserNotificationWidget::widget([
 			'label' => 'User (' . Yii::$app->user->identity->username . ')',
 			'items' => $nestedmenuItems,
 		];
-        $menuItems[] = [
-                'label' => '<i class="fa fa-bell-o"></i>&nbsp;<span class="label label-warning notifications-icon-count">0</span>',
-                'items' => [
-                    ['label' => 'You have <span class="notifications-header-count">0</span> notifications', 'encode' => false, 'options' => ['class' => 'header']],
-                    ['label' => '<div id="notifications"></div>', 'encode' => false],
-                ],
-                'encode' => false,
-            ];
+        $notificationItems[] = [
+            'label' => '<i class="fa fa-bell-o"></i>&nbsp;<span class="notification-label label-warning notifications-icon-count">0</span>',
+            'options' => ['class' => 'notifications-menu'],
+            'items' => [
+                ['label' => '<div id="notifications"></div>', 'encode' => false],
+            ],
+            'encode' => false,
+        ];
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav navbar-right'],
+            'dropDownCaret' => '',
+            'items' => $notificationItems,
+        ]);
 	}
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],

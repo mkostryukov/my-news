@@ -62,13 +62,14 @@ class Notification extends BaseNotification
         switch ($this->key) {
             case self::KEY_NEW_USER:
                 $user = User::findOne($this->key_id);
-                return Yii::t('app', 'New user ID is {userID}', [
-                    'userID' => $user->id
+                return Yii::t('app', 'User ID: {userID}<br/>User name: {userName}', [
+                    'userID' => $user->id,
+                    'userName' => $user->username,
                 ]);
 
             case self::KEY_NEW_ARTICLE:
                 $article = Article::findOne($this->key_id);
-                return Yii::t('app', 'New article title "{title}"', [
+                return Yii::t('app', '<i>{title}</i>', [
                     'title' => $article->title
                 ]);
 
