@@ -4,7 +4,9 @@ namespace app\commands;
 use Yii;
 use yii\console\Controller;
 use app\models\Article;
-use dektrium\user\models\User;
+use app\models\Notification;
+use app\models\NotificationsForm;
+use app\models\User;
 
 class InitController extends Controller
 {
@@ -48,7 +50,21 @@ class InitController extends Controller
 		
 		$this->adminID = $user->getId();
 		$this->auth->assign($this->auth->getRole('admin'), $this->adminID);
-	}
+
+        $user_notifications = new NotificationsForm($user);
+        $user_notifications->load([
+            'notifications-form' => [
+                'transports' => [
+                    'mail', 'browser'
+                ],
+                'notifications' => [
+                    Notification::KEY_NEW_USER, Notification::KEY_NEW_ARTICLE, Notification::KEY_MESSAGE
+                ],
+                'user_id' => $user->getID(),
+            ],
+        ]);
+        $user_notifications->save();
+    }
 	
 	private function createRoles()
     {

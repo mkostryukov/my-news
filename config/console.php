@@ -11,6 +11,17 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'components' => [
+        'notificationTransportCollection' => [
+            'class' => 'app\modules\notifications\Collection',
+            'transports' => [
+                'mail' => [
+                    'class' => 'app\modules\notifications\transports\Mail',
+                ],
+                'browser' => [
+                    'class' => 'app\modules\notifications\transports\Browser',
+                ],
+            ],
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
@@ -30,7 +41,18 @@ $config = [
 	'modules' => [
 		'user' => [
 			'class' => 'dektrium\user\Module',
+            'modelMap' => [
+                'User' => [
+                    'class' => 'app\models\User',
+                    'on ' . dektrium\user\models\User::AFTER_CREATE => ['app\models\User', 'setDefaultRole'],
+                    'on ' . dektrium\user\models\User::AFTER_REGISTER => ['app\models\User', 'setDefaultRole'],
+                ],
+            ],
 		],
+        'notifications' => [
+            'class' => 'app\modules\notifications\Module',
+            'notificationClass' => 'app\models\Notification',
+        ],
 	],
     'params' => $params,
     /*
