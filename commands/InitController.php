@@ -16,7 +16,7 @@ class InitController extends Controller
 		$this->auth = Yii::$app->authManager;
 		if (!$this->auth)
 			return false;
-		$this->createRoles()
+		$this->createRoles();
 		$this->createAdminUser();
 		$this->populateArticles();
 	}
@@ -68,10 +68,10 @@ class InitController extends Controller
         $this->auth->add($adminPermission);
 
         // add "auth_user" role and give this role the "viewArticles" permission
-        $this->auth_user = $this->auth->createRole('auth_user');
-		$this->auth_user->description = "Authenticated user";
-        $this->auth->add($this->auth_user);
-        $this->auth->addChild($this->auth_user, $viewArticles);
+        $auth_user = $this->auth->createRole('auth_user');
+		$auth_user->description = "Authenticated user";
+        $this->auth->add($auth_user);
+        $this->auth->addChild($auth_user, $viewArticles);
 
         // add "moderator" role and give this role the "manageArticles" permission
         // as well as the permissions of the "author" role
@@ -79,7 +79,7 @@ class InitController extends Controller
 		$moderator->description = "Moderator";
         $this->auth->add($moderator);
         $this->auth->addChild($moderator, $manageArticles);
-        $this->auth->addChild($moderator, $this->auth_user);
+        $this->auth->addChild($moderator, $auth_user);
 
         // add "admin" role and give this role the "manageUsers" permission
         // as well as the permissions of the "moderator" role
