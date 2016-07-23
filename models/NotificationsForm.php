@@ -45,8 +45,6 @@ class NotificationsForm extends Model
                 'transports' => $this->getUserTransports(),
             ], false);
         }
-//        print_r($this->transports);
-//        die($this->transports);
         parent::__construct($config);
     }
 

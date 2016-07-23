@@ -51,12 +51,26 @@ class Listener extends Component
      */
     protected static function getRecipients($key)
     {
-        $recipients = User::find()
+        return User::find()
 			->joinWith('transports')
 			->joinWith('notifications')
 			->where(['{{%user_notification}}.key' => $key])
 			->all();
-        return $recipients;
+    }
+
+    /**
+     * Finds the User models based on role.
+     *
+     * @param string $key
+     *
+     * @return array User the loaded model
+     */
+    public static function findByRole($role)
+    {
+        return User::find()
+            ->join('LEFT JOIN','auth_assignment','auth_assignment.user_id = id')
+            ->where(['auth_assignment.item_name' => $role->name])
+            ->all();
     }
 
 }

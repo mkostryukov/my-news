@@ -63,7 +63,7 @@ class Module extends BaseModule
      * Creates a notification
      *
      * @param Notification $instance - notification instance
-     * @return bool Returns TRUE on success, FALSE on failure
+     * @return array
      * @throws Exception
      */
     public function notify(Notification $instance)
